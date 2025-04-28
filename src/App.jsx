@@ -4,17 +4,17 @@ import './App.css';
 export default function App() {
   // 技の選択肢と対応する素の攻撃力
   const skills = [
-    { name: 'メテオランチャー', value: 1187 },
-    { name: 'ブラックホール', value: 1149 },
+    { name: 'メテオランチャー', value: 1181 },
+    { name: 'ブラックホール', value: 1143 },
     { name: 'ラグナヘイズ', value: 1714 },
     { name: 'ダークボリューション', value: 0 },
     { name: 'ダークキトシン', value: 0 },
-    { name: '燃え盛る聖熱', value: 0 },
+    { name: '燃え盛る聖熱', value: 1203 },
     { name: 'ミスティックブレス', value: 1307 },
     { name: 'ダークフェザー', value: 0 },
     { name: 'ふみならし', value: 0 },
     { name: 'ブオーンインパクト', value: 0 },
-    { name: '冥嵐球', value: 0 },
+    { name: '冥嵐球', value: 1272 },
     { name: '邪悪な誘い', value: 0 },
     { name: 'ニズゼフレア', value: 0 },
     { name: 'イビルプレス', value: 0 },
@@ -80,7 +80,9 @@ export default function App() {
     const powerCalc = 1 + (damageBoost + levelBonus + constellationBonus + attributeRankBonus + talentBloomBonus + leaderBonus + equipmentBonus) / 100;
     const supEffCalc = 1 + superEffective / 100;
 
-    const boost1Calc = 1 + totalBoost / 100;
+    const baseBoost  = 1 + totalBoost / 100;
+    const buffMultiplier = (1 + buff1 / 100) * (1 + buff2 / 100) * (1 + buff3 / 100);
+    const boost1Calc = baseBoost * buffMultiplier;
 
     const resistCalc = 1 - breathResistance / 100;
     const dr1Calc = 1 - damageReduction / 100;
@@ -140,6 +142,10 @@ export default function App() {
       <div><label>スキルパネル(%):(強化で5 拡張で15) <input type="number" value={damageBoost} onChange={e => setDamageBoost(+e.target.value)} /></label></div>
       <div><label>リーダ特性(%): <input type="number" value={leaderBonus} onChange={e => setLeaderBonus(+e.target.value)} /></label></div>
       <div><label>装備(%):(ばつぐんは別) <input type="number" value={equipmentBonus} onChange={e => setEquipmentBonus(+e.target.value)} /></label></div>
+
+      {/* 合計バフの表示 */}
+      <div><label>威力アップ合計(%): {totalBoost}</label></div>
+
 
       <h2>バフ
       <span style={{ fontSize: 'small' }}>
