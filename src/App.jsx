@@ -79,7 +79,7 @@ export default function App() {
   const [defensePower, setDefensePower] = useState(0);
   const [magicPower, setMagicPower] = useState(0);
   const [specialRate, setSpecialRate] = useState(0); 
-   
+
   useEffect(() => {
     const total = damageBoost + levelBonus + constellationBonus + attributeRankBonus + talentBloomBonus + leaderBonus + equipmentBonus;
     setTotalBoost(total);
@@ -106,7 +106,7 @@ export default function App() {
     <div className="App">
       <h1>ダメージ計算機</h1>
 
-      <div>
+      <div className="radio-group">
         種類:
         {skillTypes.map(type => (
           <label key={type}>

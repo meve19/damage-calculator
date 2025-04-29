@@ -57,6 +57,19 @@ p {
   color: #222;
 }
 
+/* ラジオボタンの横並び表示 */
+.radio-group {
+  display: flex;
+  align-items: center;
+  gap: 16px; /* ラジオボタン同士の余白 */
+  margin-bottom: 1rem;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 4px; /* ラジオボタンとテキストの間 */
+}
 /* スマホ対応 (幅600px以下の場合) */
 @media (max-width: 600px) {
   .App {
