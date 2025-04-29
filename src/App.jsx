@@ -10,10 +10,10 @@ export default function App() {
       { name: 'プリズムソード', value: -1 },
     ],
     呪文: [
-      { name: 'リーサルウェポン', value: -2 },
+      { name: 'リーサルウェポン', value: -1 },
     ],
     息: [
-      { name: 'シャインブラスト', value: -3 },
+      { name: 'シャインブラスト', value: -1 },
       { name: 'ラグナヘイズ', value: 1714 },
       { name: 'ダークボリューション', value: 0 },
       { name: 'ダークキトシン', value: 0 },
@@ -36,7 +36,7 @@ export default function App() {
       { name: '裏切りの炎', value: 0 },
       { name: 'らぶぎゃるショット', value: 0 },
       { name: '夢幻の咆哮', value: 0 },
-      { name: 'メテオストライク', value: -3 },
+      { name: 'メテオストライク', value: -1 },
       { name: 'キャプテンサイクロン', value: 0 },
       { name: 'バーニングアタック', value: 0 },
       { name: 'パイレーツスクランブル', value: 0 },
