@@ -94,8 +94,19 @@ export default function App() {
     const resistCalc = 1 - breathResistance / 100;
     const drTotal = (1 - damageReduction / 100) * (1 - damageReduction2 / 100) * (1 - damageReduction3 / 100);
     const attrResCalc = 1.5 - attributeResistancejyaku / 100;
+    console.log('攻撃力:', attackPower);
+    console.log('守備力:', defensePower);
+    console.log('特技倍率:', specialRate);
+    console.log('selectedType:', selectedType);
 
-    const eq = Math.floor(selectedSkill * resistCalc * boost1Calc * drTotal);
+    // 物理スキルの場合の計算
+    let eq = 0;
+    if (selectedType === '物理') {
+      eq = Math.floor(((attackPower / 2 - defensePower / 4) * (specialRate / 100)) * resistCalc * boost1Calc * drTotal);
+    } else {
+      eq = Math.floor(selectedSkill * resistCalc * boost1Calc * drTotal);
+    }
+    console.log('eq:', eq);
     const wk = Math.floor(eq * supEffCalc * attrResCalc);
 
     setEqualDamage(eq);
