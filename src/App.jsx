@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import './App.css';
 
 export default function App() {
-  // 1. タイプごとにスキルを分類
-  const allSkills = {
+  const skillTypes = ['物理', '呪文', '息', '体技'];
+  const [selectedType, setSelectedType] = useState('息');
+
+  const skills = {
     物理: [
-      { name: 'プリズムソード', value: -1 }
+      { name: 'プリズムソード', value: -1 },
     ],
     呪文: [
-      { name: 'リーサルウェポン', value: -2 }
+      { name: 'リーサルウェポン', value: -2 },
     ],
     息: [
       { name: 'シャインブラスト', value: -3 },
@@ -19,7 +21,7 @@ export default function App() {
       { name: 'ミスティックブレス', value: 1307 },
       { name: '冥嵐球', value: 1272 },
       { name: 'ニズゼフレア', value: 0 },
-      { name: '招雷波', value: 0 }
+      { name: '招雷波', value: 0 },
     ],
     体技: [
       { name: 'メテオランチャー', value: 1181 },
@@ -41,89 +43,60 @@ export default function App() {
       { name: '必中イオ弾', value: 1021 },
       { name: 'ロマンスナイプショット', value: 1550 },
       { name: 'バーストショット弾', value: 1044 },
-      { name: '精気を刈り取る鎌', value: 1257 }
-    ]
+      { name: '精気を刈り取る鎌', value: 1257 },
+    ],
   };
 
-  // 2. スキルタイプの state を追加
-  const [skillType, setSkillType] = useState('息');
-  const [selectedSkill, setSelectedSkill] = useState(allSkills[skillType][0].value);  // 初期選択をタイプに基づいて設定
+  const sortedSkills = skills[selectedType].sort((a, b) => a.name.localeCompare(b.name));
 
-  // 3. 選択中のタイプのスキル一覧
-  const filteredSkills = allSkills[skillType] || [];
-  const sortedFilteredSkills = filteredSkills.sort((a, b) => a.name.localeCompare(b.name));
+  const [selectedSkill, setSelectedSkill] = useState(sortedSkills[0]?.value || 0);
+  const [kiso, setKiso] = useState(0);
+  const [superEffective, setSuperEffective] = useState(0);
 
-  // ソート（名前順）
-  const sortedSkills = filteredSkills.sort((a, b) => a.name.localeCompare(b.name));
+  const [levelBonus, setLevelBonus] = useState(8);
+  const [constellationBonus, setConstellationBonus] = useState(10);
+  const [attributeRankBonus, setAttributeRankBonus] = useState(10);
+  const [talentBloomBonus, setTalentBloomBonus] = useState(0);
+  const [damageBoost, setDamageBoost] = useState(0);
+  const [leaderBonus, setLeaderBonus] = useState(0);
+  const [equipmentBonus, setEquipmentBonus] = useState(0);
 
-  // 各パラメータの state
-  const [kiso, setKiso] = useState(0);  // 素の威力
-  const [superEffective, setSuperEffective] = useState(0);  // ばつぐん(%)
+  const [buff1, setBuff1] = useState(0);
+  const [buff2, setBuff2] = useState(0);
+  const [buff3, setBuff3] = useState(0);
 
-  // バフ系
-  const [levelBonus, setLevelBonus] = useState(8);   // レベル特性(%)
-  const [constellationBonus, setConstellationBonus] = useState(10); // 凸特性(%)
-  const [attributeRankBonus, setAttributeRankBonus] = useState(10); // 属性ランク(%)
-  const [talentBloomBonus, setTalentBloomBonus] = useState(0); // 才能開花(%)
-  const [damageBoost, setDamageBoost] = useState(0); // スキルパネル(%)
-  const [leaderBonus, setLeaderBonus] = useState(0); // リーダ特性(%)
-  const [equipmentBonus, setEquipmentBonus] = useState(0); // 装備(%)
+  const [breathResistance, setBreathResistance] = useState(0);
+  const [damageReduction, setDamageReduction] = useState(0);
+  const [damageReduction2, setDamageReduction2] = useState(0);
+  const [damageReduction3, setDamageReduction3] = useState(30);
+  const [attributeResistancejyaku, setAttrResJyaku] = useState(0);
 
-  // バフ1, バフ2, バフ3
-  const [buff1, setBuff1] = useState(0); // バフ1(%)
-  const [buff2, setBuff2] = useState(0); // バフ2(%)
-  const [buff3, setBuff3] = useState(0); // バフ3(%)
-
-  // 敵情報系
-  const [breathResistance, setBreathResistance] = useState(0); // 息/体技耐性(%)
-  const [damageReduction, setDamageReduction] = useState(0);   // ダメージ軽減(%)
-  const [damageReduction2, setDamageReduction2] = useState(0); // ダメージ軽減2(%)
-  const [damageReduction3, setDamageReduction3] = useState(30); // 闘技場軽減(%)
-  const [attributeResistancejyaku, setAttrResJyaku] = useState(0); // 属性耐性(%)
-
-  // 計算結果
   const [equalDamage, setEqualDamage] = useState(0);
   const [weakDamage, setWeakDamage] = useState(0);
-  const [totalBoost, setTotalBoost] = useState(0);  // 合計バフ
+  const [totalBoost, setTotalBoost] = useState(0);
 
-  // 合計バフの計算
+  const [attackPower, setAttackPower] = useState(0);
+  const [defensePower, setDefensePower] = useState(0);
+  const [magicPower, setMagicPower] = useState(0);
+  const [specialRate, setSpecialRate] = useState(0); 
+   
   useEffect(() => {
     const total = damageBoost + levelBonus + constellationBonus + attributeRankBonus + talentBloomBonus + leaderBonus + equipmentBonus;
     setTotalBoost(total);
   }, [damageBoost, levelBonus, constellationBonus, attributeRankBonus, talentBloomBonus, leaderBonus, equipmentBonus]);
 
   const calculate = () => {
-    // 各種倍率に変換
-    const powerCalc = 1 + (damageBoost + levelBonus + constellationBonus + attributeRankBonus + talentBloomBonus + leaderBonus + equipmentBonus) / 100;
+    const powerCalc = 1 + totalBoost / 100;
     const supEffCalc = 1 + superEffective / 100;
-
-    const baseBoost  = 1 + totalBoost / 100;
+    const baseBoost = powerCalc;
     const buffMultiplier = (1 + buff1 / 100) * (1 + buff2 / 100) * (1 + buff3 / 100);
     const boost1Calc = baseBoost * buffMultiplier;
-
     const resistCalc = 1 - breathResistance / 100;
-    const dr1Calc = 1 - damageReduction / 100;
-    const dr2Calc = 1 - damageReduction2 / 100;
-    const dr3Calc = 1 - damageReduction3 / 100;
+    const drTotal = (1 - damageReduction / 100) * (1 - damageReduction2 / 100) * (1 - damageReduction3 / 100);
     const attrResCalc = 1.5 - attributeResistancejyaku / 100;
 
-    // 軽減合計
-    const drTotal = dr1Calc * dr2Calc * dr3Calc;
-
-    // 等倍ダメージ
-    const eq = Math.floor(
-      selectedSkill
-      * resistCalc
-      * boost1Calc
-      * drTotal
-    );
-
-    // 弱点ダメージ
-    const wk = Math.floor(
-      eq
-      * supEffCalc
-      * attrResCalc
-    );
+    const eq = Math.floor(selectedSkill * resistCalc * boost1Calc * drTotal);
+    const wk = Math.floor(eq * supEffCalc * attrResCalc);
 
     setEqualDamage(eq);
     setWeakDamage(wk);
@@ -132,76 +105,101 @@ export default function App() {
   return (
     <div className="App">
       <h1>ダメージ計算機</h1>
-      {/* スキルタイプ選択 */}
-      <div style={{ marginBottom: '1rem' }}>
-        <label style={{ fontWeight: 'bold' }}>スキルタイプ:</label>
-        <div style={{ display: 'flex', justifyContent: 'space-between', width: '200px' }}>
-          {['物理', '呪文', '息', '体技'].map(type => (
-            <label key={type} style={{ margin: 0 }}>
-              <input
-                type="radio"
-                value={type}
-                checked={skillType === type}
-                onChange={(e) => {
-                  setSkillType(e.target.value);
-                  setSelectedSkill(allSkills[e.target.value][0].value);  // タイプ変更時に初期スキルを設定
-                }}
-                style={{ marginRight: '5px' }}
-              />
-              {type}
-            </label>
-          ))}
-        </div>
+
+      <div>
+        種類:
+        {skillTypes.map(type => (
+          <label key={type}>
+            <input
+              type="radio"
+              value={type}
+              checked={selectedType === type}
+              onChange={() => {
+                setSelectedType(type);
+                setSelectedSkill(skills[type][0]?.value || 0);
+              }}
+            />
+            {type}
+          </label>
+        ))}
       </div>
 
-    {/* 技選択の入力 */}
-    <div>
-      <label>技の威力 (スキル + 10): 
-        <select onChange={(e) => setSelectedSkill(+e.target.value)}>
-          {sortedFilteredSkills.map(skill => (
-            <option key={skill.name} value={skill.value}>
-              {skill.name} {skill.value > 0 && `(${skill.value})`}
-            </option>
-          ))}
-        </select>
-      </label>
-      <label>または直接入力: 
-        <input type="number" value={selectedSkill} onChange={(e) => setSelectedSkill(+e.target.value)} />
-      </label>
-    </div>
+      <div>
+        <label>技:
+          <select value={selectedSkill} onChange={(e) => setSelectedSkill(+e.target.value)}>
+            {sortedSkills.map(skill => (
+              <option key={skill.name} value={skill.value}>
+                {skill.name} {skill.value > 0 && `(${skill.value})`}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>または直接入力:
+          <input type="number" value={selectedSkill} onChange={e => setSelectedSkill(+e.target.value)} />
+        </label>
+      </div>
 
-    <div><label>素の威力: {selectedSkill}</label></div>
+      {(selectedType === '物理' || selectedType === '呪文' || (['息', '体技'].includes(selectedType) && selectedSkill < 0)) && (
+  <div>
+    {/* 物理タイプの場合：攻撃力 → 特技倍率 */}
+    {selectedType === '物理' && (
+      <>
+        <div>
+          <label>
+            攻撃力: 
+            <input type="number" value={attackPower} onChange={e => setAttackPower(+e.target.value)} />
+          </label>
+        </div>
+        <div>
+          <label>
+            特技倍率(%): 
+            <input type="number" value={specialRate} onChange={e => setSpecialRate(+e.target.value)} />
+          </label>
+        </div>
+      </>
+    )}
+
+    {/* 呪文タイプ：かしこさ */}
+    {selectedType === '呪文' && (
+      <div>
+        <label>
+          かしこさ: 
+          <input type="number" value={magicPower} onChange={e => setMagicPower(+e.target.value)} />
+        </label>
+      </div>
+    )}
+
+    {/* 息・体技 かつ selectedSkill < 0 の場合のみ攻撃力 */}
+    {(selectedType === '息' || selectedType === '体技') && selectedSkill < 0 && (
+      <div>
+        <label>
+          攻撃力: 
+          <input type="number" value={attackPower} onChange={e => setAttackPower(+e.target.value)} />
+        </label>
+      </div>
+    )}
+  </div>
+)}
+
 
       <h2>威力アップ</h2>
-      <div><label>レベル特性(%):(レベル140は8) <input type="number" value={levelBonus} onChange={e => setLevelBonus(+e.target.value)} /></label></div>
-      <div><label>凸特性(%):(3凸で5 完凸で10) <input type="number" value={constellationBonus} onChange={e => setConstellationBonus(+e.target.value)} /></label></div>
-      <div><label>属性ランク(%):lv8で6 lv9で10 <input type="number" value={attributeRankBonus} onChange={e => setAttributeRankBonus(+e.target.value)} /></label></div>
-      <div><label>才能開花(%): (ばつぐんは別)<input type="number" value={talentBloomBonus} onChange={e => setTalentBloomBonus(+e.target.value)} /></label></div>
-      <div><label>スキルパネル(%):(強化で5 拡張で15) <input type="number" value={damageBoost} onChange={e => setDamageBoost(+e.target.value)} /></label></div>
+      <div><label>レベル特性(%): <input type="number" value={levelBonus} onChange={e => setLevelBonus(+e.target.value)} /></label></div>
+      <div><label>凸特性(%): <input type="number" value={constellationBonus} onChange={e => setConstellationBonus(+e.target.value)} /></label></div>
+      <div><label>属性ランク(%): <input type="number" value={attributeRankBonus} onChange={e => setAttributeRankBonus(+e.target.value)} /></label></div>
+      <div><label>才能開花(%): <input type="number" value={talentBloomBonus} onChange={e => setTalentBloomBonus(+e.target.value)} /></label></div>
+      <div><label>スキルパネル(%): <input type="number" value={damageBoost} onChange={e => setDamageBoost(+e.target.value)} /></label></div>
       <div><label>リーダ特性(%): <input type="number" value={leaderBonus} onChange={e => setLeaderBonus(+e.target.value)} /></label></div>
-      <div><label>装備(%):(ばつぐんは別) <input type="number" value={equipmentBonus} onChange={e => setEquipmentBonus(+e.target.value)} /></label></div>
-
-      {/* 合計バフの表示 */}
+      <div><label>装備(%): <input type="number" value={equipmentBonus} onChange={e => setEquipmentBonus(+e.target.value)} /></label></div>
       <div><label>威力アップ合計(%): {totalBoost}</label></div>
 
-
-      <h2>バフ
-      <span style={{ fontSize: 'small' }}>
-      <br /> フォース: 20 <br />
-        テンション: 20-100 <br />
-        息体技バフ: 15-45 <br />
-        ダメージアップ: 10-30 <br />
-        マアテリアルブレイク: 20-60 <br />
-      </span>
-      </h2>
-
+      <h2>バフ</h2>
       <div><label>バフ1(%): <input type="number" value={buff1} onChange={e => setBuff1(+e.target.value)} /></label></div>
       <div><label>バフ2(%): <input type="number" value={buff2} onChange={e => setBuff2(+e.target.value)} /></label></div>
       <div><label>バフ3(%): <input type="number" value={buff3} onChange={e => setBuff3(+e.target.value)} /></label></div>
-
       <div><label>ばつぐん(%): <input type="number" value={superEffective} onChange={e => setSuperEffective(+e.target.value)} /></label></div>
 
       <h2>敵情報</h2>
+      {selectedType === '物理' && <div><label>守備力: <input type="number" value={defensePower} onChange={e => setDefensePower(+e.target.value)} /></label></div>}
       <div><label>息/体技耐性(%): <input type="number" value={breathResistance} onChange={e => setBreathResistance(+e.target.value)} /></label></div>
       <div><label>ダメージ軽減(%): <input type="number" value={damageReduction} onChange={e => setDamageReduction(+e.target.value)} /></label></div>
       <div><label>ダメージ軽減2(%): <input type="number" value={damageReduction2} onChange={e => setDamageReduction2(+e.target.value)} /></label></div>
@@ -210,7 +208,6 @@ export default function App() {
 
       <button onClick={calculate}>計算</button>
 
-      {/* 結果表示 */}
       <div style={{ marginTop: '1rem' }}>
         <p>等倍ダメージ: {equalDamage.toFixed(2)}</p>
         <p>弱点ダメージ: {weakDamage.toFixed(2)}</p>
