@@ -85,6 +85,19 @@ export default function App() {
     setTotalBoost(total);
   }, [damageBoost, levelBonus, constellationBonus, attributeRankBonus, talentBloomBonus, leaderBonus, equipmentBonus]);
 
+  //プリズムソードの特技倍率を設定 
+  useEffect(() => {
+    const selectedSkillName = skills[selectedType].find(skill => skill.value === selectedSkill)?.name;
+  
+    if (selectedSkillName === 'プリズムソード' || selectedSkillName === 'シャインブラスト') {
+      setBuff1(20);
+      setTotalBoost(5);
+    }
+    if (selectedSkillName === 'プリズムソード' ){
+          setSpecialRate(615);
+    }
+  }, [selectedSkill, selectedType]);
+
   const calculate = () => {
     const powerCalc = 1 + totalBoost / 100;
     const supEffCalc = 1 + superEffective / 100;
@@ -214,7 +227,7 @@ export default function App() {
 
       <h2>敵情報</h2>
       {selectedType === '物理' && <div><label>守備力: <input type="number" value={defensePower} onChange={e => setDefensePower(+e.target.value)} /></label></div>}
-      <div><label>息/体技耐性(%): <input type="number" value={breathResistance} onChange={e => setBreathResistance(+e.target.value)} /></label></div>
+      <div><label>物理/呪文/息/体技耐性(%): <input type="number" value={breathResistance} onChange={e => setBreathResistance(+e.target.value)} /></label></div>
       <div><label>ダメージ軽減(%): <input type="number" value={damageReduction} onChange={e => setDamageReduction(+e.target.value)} /></label></div>
       <div><label>ダメージ軽減2(%): <input type="number" value={damageReduction2} onChange={e => setDamageReduction2(+e.target.value)} /></label></div>
       <div><label>闘技場軽減(%): <input type="number" value={damageReduction3} onChange={e => setDamageReduction3(+e.target.value)} /></label></div>
