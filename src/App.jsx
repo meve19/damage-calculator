@@ -2,48 +2,65 @@ import { useState, useEffect } from 'react';
 import './App.css';
 
 export default function App() {
-  // 技の選択肢と対応する素の攻撃力
-  const skills = [
-    { name: 'メテオランチャー', value: 1181 },
-    { name: 'ブラックホール', value: 1143 },
-    { name: 'ラグナヘイズ', value: 1714 },
-    { name: 'ダークボリューション', value: 0 },
-    { name: 'ダークキトシン', value: 0 },
-    { name: '燃え盛る聖熱', value: 1203 },
-    { name: 'ミスティックブレス', value: 1307 },
-    { name: 'ダークフェザー', value: 0 },
-    { name: 'ふみならし', value: 0 },
-    { name: 'ブオーンインパクト', value: 0 },
-    { name: '冥嵐球', value: 1272 },
-    { name: '邪悪な誘い', value: 0 },
-    { name: 'ニズゼフレア', value: 0 },
-    { name: 'イビルプレス', value: 0 },
-    { name: '終末の炎', value: 0 },
-    { name: 'ステテコストリーム', value: 1196 },
-    { name: '招雷波', value: 0 },
-    { name: '裏切りの炎', value: 0 },
-    { name: 'らぶぎゃるショット', value: 0 },
-    { name: '夢幻の咆哮', value: 0 },
-    { name: 'メテオストライク', value: 0 },
-    { name: 'キャプテンサイクロン', value: 0 },
-    { name: 'バーニングアタック', value: 0 },
-    { name: 'パイレーツスクランブル', value: 0 },
-    { name: '必中イオ弾', value: 0 },
-    { name: 'ロマンスナイプショット', value: 0 },
-    { name: 'バーストショット弾', value: 0 },
-    { name: '精気を刈り取る鎌', value: 0 }
-  ];
+  // 1. タイプごとにスキルを分類
+  const allSkills = {
+    物理: [
+      { name: 'プリズムソード', value: -1 }
+    ],
+    呪文: [
+      { name: 'リーサルウェポン', value: -2 }
+    ],
+    息: [
+      { name: 'シャインブラスト', value: -3 },
+      { name: 'ラグナヘイズ', value: 1714 },
+      { name: 'ダークボリューション', value: 0 },
+      { name: 'ダークキトシン', value: 0 },
+      { name: '燃え盛る聖熱', value: 1203 },
+      { name: 'ミスティックブレス', value: 1307 },
+      { name: '冥嵐球', value: 1272 },
+      { name: 'ニズゼフレア', value: 0 },
+      { name: '招雷波', value: 0 }
+    ],
+    体技: [
+      { name: 'メテオランチャー', value: 1181 },
+      { name: 'ブラックホール', value: 1143 },
+      { name: 'ダークフェザー', value: 0 },
+      { name: 'ふみならし', value: 0 },
+      { name: 'ブオーンインパクト', value: 0 },
+      { name: '邪悪な誘い', value: 0 },
+      { name: 'イビルプレス', value: 0 },
+      { name: '終末の炎', value: 0 },
+      { name: 'ステテコストリーム', value: 1196 },
+      { name: '裏切りの炎', value: 0 },
+      { name: 'らぶぎゃるショット', value: 0 },
+      { name: '夢幻の咆哮', value: 0 },
+      { name: 'メテオストライク', value: -3 },
+      { name: 'キャプテンサイクロン', value: 0 },
+      { name: 'バーニングアタック', value: 0 },
+      { name: 'パイレーツスクランブル', value: 0 },
+      { name: '必中イオ弾', value: 1021 },
+      { name: 'ロマンスナイプショット', value: 1550 },
+      { name: 'バーストショット弾', value: 1044 },
+      { name: '精気を刈り取る鎌', value: 1257 }
+    ]
+  };
+
+  // 2. スキルタイプの state を追加
+  const [skillType, setSkillType] = useState('息');
+  const [selectedSkill, setSelectedSkill] = useState(allSkills[skillType][0].value);  // 初期選択をタイプに基づいて設定
+
+  // 3. 選択中のタイプのスキル一覧
+  const filteredSkills = allSkills[skillType] || [];
+  const sortedFilteredSkills = filteredSkills.sort((a, b) => a.name.localeCompare(b.name));
 
   // ソート（名前順）
-  const sortedSkills = skills.sort((a, b) => a.name.localeCompare(b.name));
+  const sortedSkills = filteredSkills.sort((a, b) => a.name.localeCompare(b.name));
 
   // 各パラメータの state
-  const [selectedSkill, setSelectedSkill] = useState(skills[0].value); // 技選択
-  const [kiso, setKiso] = useState(0);  // 素の攻撃力
+  const [kiso, setKiso] = useState(0);  // 素の威力
   const [superEffective, setSuperEffective] = useState(0);  // ばつぐん(%)
 
   // バフ系
-
   const [levelBonus, setLevelBonus] = useState(8);   // レベル特性(%)
   const [constellationBonus, setConstellationBonus] = useState(10); // 凸特性(%)
   const [attributeRankBonus, setAttributeRankBonus] = useState(10); // 属性ランク(%)
@@ -114,25 +131,46 @@ export default function App() {
 
   return (
     <div className="App">
-      <h1>息体技ダメージ計算機</h1>
-
-      {/* 技選択の入力 */}
-      <div>
-        <label>技の威力 (スキル + 10): 
-          <select onChange={(e) => setSelectedSkill(+e.target.value)}>
-            {sortedSkills.map(skill => (
-              <option key={skill.name} value={skill.value}>
-                {skill.name} {skill.value > 0 && `(${skill.value})`}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>または直接入力: 
-          <input type="number" value={selectedSkill} onChange={(e) => setSelectedSkill(+e.target.value)} />
-        </label>
+      <h1>ダメージ計算機</h1>
+      {/* スキルタイプ選択 */}
+      <div style={{ marginBottom: '1rem' }}>
+        <label style={{ fontWeight: 'bold' }}>スキルタイプ:</label>
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '200px' }}>
+          {['物理', '呪文', '息', '体技'].map(type => (
+            <label key={type} style={{ margin: 0 }}>
+              <input
+                type="radio"
+                value={type}
+                checked={skillType === type}
+                onChange={(e) => {
+                  setSkillType(e.target.value);
+                  setSelectedSkill(allSkills[e.target.value][0].value);  // タイプ変更時に初期スキルを設定
+                }}
+                style={{ marginRight: '5px' }}
+              />
+              {type}
+            </label>
+          ))}
+        </div>
       </div>
 
-      <div><label>素の威力: {selectedSkill}</label></div>
+    {/* 技選択の入力 */}
+    <div>
+      <label>技の威力 (スキル + 10): 
+        <select onChange={(e) => setSelectedSkill(+e.target.value)}>
+          {sortedFilteredSkills.map(skill => (
+            <option key={skill.name} value={skill.value}>
+              {skill.name} {skill.value > 0 && `(${skill.value})`}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label>または直接入力: 
+        <input type="number" value={selectedSkill} onChange={(e) => setSelectedSkill(+e.target.value)} />
+      </label>
+    </div>
+
+    <div><label>素の威力: {selectedSkill}</label></div>
 
       <h2>威力アップ</h2>
       <div><label>レベル特性(%):(レベル140は8) <input type="number" value={levelBonus} onChange={e => setLevelBonus(+e.target.value)} /></label></div>
