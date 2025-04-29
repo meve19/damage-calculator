@@ -3,7 +3,7 @@ import './App.css';
 
 export default function App() {
   const skillTypes = ['物理', '呪文', '息', '体技'];
-  const [selectedType, setSelectedType] = useState('息');
+  const [selectedType, setSelectedType] = useState('物理');
 
   const skills = {
     物理: [
