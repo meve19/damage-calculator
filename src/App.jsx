@@ -202,8 +202,11 @@ export default function App() {
       <div><label>リーダ特性(%): <input type="number" value={leaderBonus} onChange={e => setLeaderBonus(+e.target.value)} /></label></div>
       <div><label>装備(%): <input type="number" value={equipmentBonus} onChange={e => setEquipmentBonus(+e.target.value)} /></label></div>
       <div><label>威力アップ合計(%): {totalBoost}</label></div>
+      
+      <h2 className="tooltip" data-tooltip="フォース: 20, テンション: 20-100, 息体技バフ: 15-45, ダメージアップ: 10-30, マアテリアルブレイク: 20-60">
+      バフ
+      </h2>
 
-      <h2>バフ</h2>
       <div><label>バフ1(%): <input type="number" value={buff1} onChange={e => setBuff1(+e.target.value)} /></label></div>
       <div><label>バフ2(%): <input type="number" value={buff2} onChange={e => setBuff2(+e.target.value)} /></label></div>
       <div><label>バフ3(%): <input type="number" value={buff3} onChange={e => setBuff3(+e.target.value)} /></label></div>

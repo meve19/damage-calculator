@@ -70,6 +70,31 @@ p {
   align-items: center;
   gap: 4px; /* ラジオボタンとテキストの間 */
 }
+
+.tooltip {
+  position: relative;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  top: -5px;
+  left: 105%;
+  white-space: nowrap;
+  background-color: #333;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  font-size: small;
+  display: none;
+}
+
+.tooltip:hover::after {
+  display: block;
+}
+
 /* スマホ対応 (幅600px以下の場合) */
 @media (max-width: 600px) {
   .App {
