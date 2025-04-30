@@ -7,43 +7,44 @@ export default function App() {
 
   const skills = {
     物理: [
-      { name: 'プリズムソード', value: -1 },
+      { name: 'プリズムソード', value: 1 ,power: 0 },
+      { name: '魔王の絶技', value: 2 ,power: 0},
     ],
     呪文: [
-      { name: 'リーサルウェポン', value: -1 },
+      { name: 'リーサルウェポン', value: 1,power: 0 },
     ],
     息: [
-      { name: 'シャインブラスト', value: -1 },
-      { name: 'ラグナヘイズ', value: 1714 },
-      { name: 'ダークボリューション', value: 0 },
-      { name: 'ダークキトシン', value: 0 },
-      { name: '燃え盛る聖熱', value: 1203 },
-      { name: 'ミスティックブレス', value: 1307 },
-      { name: '冥嵐球', value: 1272 },
-      { name: 'ニズゼフレア', value: 0 },
-      { name: '招雷波', value: 0 },
+      { name: 'シャインブラスト', value: -1,power: 0 },
+      { name: 'ラグナヘイズ', value: 1, power: 1714 },
+      { name: 'ダークボリューション', value: 2, power: 0 },
+      { name: 'ダークキトシン', value: 3 , power: 0 },
+      { name: '燃え盛る聖熱', value: 4 ,power: 1203 },
+      { name: 'ミスティックブレス', value: 5, power: 1307 },
+      { name: '冥嵐球', value: 6, power: 1272 },
+      { name: 'ニズゼフレア', value: 7, power: 0 },
+      { name: '招雷波', value: 8, power: 0 },
     ],
     体技: [
-      { name: 'メテオランチャー', value: 1181 },
-      { name: 'ブラックホール', value: 1143 },
-      { name: 'ダークフェザー', value: 0 },
-      { name: 'ふみならし', value: 0 },
-      { name: 'ブオーンインパクト', value: 0 },
-      { name: '邪悪な誘い', value: 0 },
-      { name: 'イビルプレス', value: 0 },
-      { name: '終末の炎', value: 0 },
-      { name: 'ステテコストリーム', value: 1196 },
-      { name: '裏切りの炎', value: 0 },
-      { name: 'らぶぎゃるショット', value: 0 },
-      { name: '夢幻の咆哮', value: 0 },
-      { name: 'メテオストライク', value: -1 },
-      { name: 'キャプテンサイクロン', value: 0 },
-      { name: 'バーニングアタック', value: 0 },
-      { name: 'パイレーツスクランブル', value: 0 },
-      { name: '必中イオ弾', value: 1021 },
-      { name: 'ロマンスナイプショット', value: 1550 },
-      { name: 'バーストショット弾', value: 1044 },
-      { name: '精気を刈り取る鎌', value: 1257 },
+      { name: 'メテオランチャー', value: 1, power: 1181 },
+      { name: 'ブラックホール', value: 2, power: 1143 },
+      { name: 'ダークフェザー', value: 3, power: 0 },
+      { name: 'ふみならし', value: 4, power: 0 },
+      { name: 'ブオーンインパクト', value: 5, power: 0 },
+      { name: '邪悪な誘い', value: 6, power: 0 },
+      { name: 'イビルプレス', value: 7, power: 0 },
+      { name: '終末の炎', value: 8, power: 0 },
+      { name: 'ステテコストリーム', value: 9, power: 1196 },
+      { name: '裏切りの炎', value: 10, power: 0 },
+      { name: 'らぶぎゃるショット', value: 11, power: 0 },
+      { name: '夢幻の咆哮', value: 12, power: 0 },
+      { name: 'メテオストライク', value: -1, power: 0 },
+      { name: 'キャプテンサイクロン', value: 13, power: 0 },
+      { name: 'バーニングアタック', value: 14, power: 0 },
+      { name: 'パイレーツスクランブル', value: 15, power: 0 },
+      { name: '必中イオ弾', value: 16, power: 1021 },
+      { name: 'ロマンスナイプショット', value: 17, power: 1550 },
+      { name: 'バーストショット弾', value: 18, power: 1044 },
+      { name: '精気を刈り取る鎌', value: 19, power: 1257 },
     ],
   };
 
@@ -93,6 +94,8 @@ export default function App() {
     if (selectedSkillName === 'プリズムソード' || selectedSkillName === 'シャインブラスト') {
       setBuff1(20);
       setskillpanelBonus(5);
+    }else if(selectedSkillName === '魔王の絶技'){
+      setBuff1(15);
     }else {
       // その他のスキルなら初期値に戻す
       setBuff1(0);
@@ -100,8 +103,11 @@ export default function App() {
     }
     if (selectedSkillName === 'プリズムソード' ){
       setSpecialRate(615);
-    }else {
-      // プリズムソード以外なら初期値に戻す（たとえば0やnullなど）
+    }else if(selectedSkillName === '魔王の絶技'){
+      setSpecialRate(600);
+    }
+    else {
+      // 以外なら初期値に戻す
       setSpecialRate(0);
     }
   }, [selectedSkill, selectedType]);
@@ -118,7 +124,9 @@ export default function App() {
 
     // 物理スキルの場合の計算
     let eq = 0;
-    const selectedSkillName = skills[selectedType].find(skill => skill.value === selectedSkill)?.name;
+    const selectedSkillObj = skills[selectedType].find(skill => skill.value === selectedSkill);
+    const selectedSkillName = selectedSkillObj?.name;
+    const selectedSkillPower = selectedSkillObj?.power ?? 0;
 
     if (selectedType === '物理') {
       eq = Math.floor(((attackPower / 2 - defensePower / 4) * (specialRate / 100)) * resistCalc * boost1Calc * drTotal);
@@ -126,7 +134,7 @@ export default function App() {
       const calculatedValue = 1.345 * attackPower + 19.196;
       eq = Math.floor(calculatedValue * resistCalc * boost1Calc * drTotal);
     } else {
-      eq = Math.floor(selectedSkill * resistCalc * boost1Calc * drTotal);
+      eq = Math.floor(selectedSkillPower * resistCalc * boost1Calc * drTotal);
     }
 
     eq = eq * ( 1+ skillLevel * 0.05) /1.5; //スキルレベルによる補正
@@ -164,14 +172,14 @@ export default function App() {
           <select value={selectedSkill} onChange={(e) => setSelectedSkill(+e.target.value)}>
             {sortedSkills.map(skill => (
               <option key={skill.name} value={skill.value}>
-                {skill.name} {skill.value > 0 && `(${skill.value})`}
+                {skill.name} {skill.value > 0 && `(${skill.power})`}
               </option>
             ))}
           </select>
         </label>
-        <label>または直接入力:
+        {/* <label>または直接入力:
           <input type="number" value={selectedSkill} onChange={e => setSelectedSkill(+e.target.value)} />
-        </label>
+        </label> */}
       </div>
 
       {(selectedType === '物理' || selectedType === '呪文' || (['息', '体技'].includes(selectedType) && selectedSkill < 0)) && (
