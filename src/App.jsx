@@ -96,6 +96,7 @@ export default function App() {
       setskillpanelBonus(5);
     }else if(selectedSkillName === '魔王の絶技'){
       setBuff1(15);
+      setskillpanelBonus(0);
     }else {
       // その他のスキルなら初期値に戻す
       setBuff1(0);
