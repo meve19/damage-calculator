@@ -53,11 +53,12 @@ export default function App() {
   const [kiso, setKiso] = useState(0);
   const [superEffective, setSuperEffective] = useState(0);
 
+  const [skillLevel, setskillLevel] = useState(10);
   const [levelBonus, setLevelBonus] = useState(8);
   const [constellationBonus, setConstellationBonus] = useState(10);
   const [attributeRankBonus, setAttributeRankBonus] = useState(10);
   const [talentBloomBonus, setTalentBloomBonus] = useState(0);
-  const [damageBoost, setDamageBoost] = useState(0);
+  const [skillpanelBonus, setskillpanelBonus] = useState(0);
   const [leaderBonus, setLeaderBonus] = useState(0);
   const [equipmentBonus, setEquipmentBonus] = useState(0);
 
@@ -81,9 +82,9 @@ export default function App() {
   const [specialRate, setSpecialRate] = useState(0); 
 
   useEffect(() => {
-    const total = damageBoost + levelBonus + constellationBonus + attributeRankBonus + talentBloomBonus + leaderBonus + equipmentBonus;
+    const total = skillpanelBonus + levelBonus + constellationBonus + attributeRankBonus + talentBloomBonus + leaderBonus + equipmentBonus;
     setTotalBoost(total);
-  }, [damageBoost, levelBonus, constellationBonus, attributeRankBonus, talentBloomBonus, leaderBonus, equipmentBonus]);
+  }, [skillpanelBonus, levelBonus, constellationBonus, attributeRankBonus, talentBloomBonus, leaderBonus, equipmentBonus]);
 
   //プリズムソードの特技倍率を設定 
   useEffect(() => {
@@ -91,10 +92,17 @@ export default function App() {
   
     if (selectedSkillName === 'プリズムソード' || selectedSkillName === 'シャインブラスト') {
       setBuff1(20);
-      setTotalBoost(5);
+      setskillpanelBonus(5);
+    }else {
+      // その他のスキルなら初期値に戻す
+      setBuff1(0);
+      setskillpanelBonus(0);
     }
     if (selectedSkillName === 'プリズムソード' ){
-          setSpecialRate(615);
+      setSpecialRate(615);
+    }else {
+      // プリズムソード以外なら初期値に戻す（たとえば0やnullなど）
+      setSpecialRate(0);
     }
   }, [selectedSkill, selectedType]);
 
@@ -120,6 +128,9 @@ export default function App() {
     } else {
       eq = Math.floor(selectedSkill * resistCalc * boost1Calc * drTotal);
     }
+
+    eq = eq * ( 1+ skillLevel * 0.05) /1.5; //スキルレベルによる補正
+    
     const wk = Math.floor(eq * supEffCalc * attrResCalc);
 
     setEqualDamage(eq);
@@ -205,13 +216,14 @@ export default function App() {
   </div>
 )}
 
+      <div><label>特技レベル: <input type="number" value={skillLevel} onChange={e => setskillLevel(+e.target.value)} /></label></div>  
 
       <h2>威力アップ</h2>
       <div><label>レベル特性(%): <input type="number" value={levelBonus} onChange={e => setLevelBonus(+e.target.value)} /></label></div>
       <div><label>凸特性(%): <input type="number" value={constellationBonus} onChange={e => setConstellationBonus(+e.target.value)} /></label></div>
       <div><label>属性ランク(%): <input type="number" value={attributeRankBonus} onChange={e => setAttributeRankBonus(+e.target.value)} /></label></div>
       <div><label>才能開花(%): <input type="number" value={talentBloomBonus} onChange={e => setTalentBloomBonus(+e.target.value)} /></label></div>
-      <div><label>スキルパネル(%): <input type="number" value={damageBoost} onChange={e => setDamageBoost(+e.target.value)} /></label></div>
+      <div><label>スキルパネル(%): <input type="number" value={skillpanelBonus} onChange={e => setskillpanelBonus(+e.target.value)} /></label></div>
       <div><label>リーダ特性(%): <input type="number" value={leaderBonus} onChange={e => setLeaderBonus(+e.target.value)} /></label></div>
       <div><label>装備(%): <input type="number" value={equipmentBonus} onChange={e => setEquipmentBonus(+e.target.value)} /></label></div>
       <div><label>威力アップ合計(%): {totalBoost}</label></div>
