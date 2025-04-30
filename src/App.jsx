@@ -12,6 +12,7 @@ export default function App() {
     ],
     呪文: [
       { name: 'リーサルウェポン', value: 1,power: 0 },
+      { name: 'カオススパーク', value: 2,power: 0 },
     ],
     息: [
       { name: 'シャインブラスト', value: -1,power: 0 },
@@ -134,7 +135,13 @@ export default function App() {
     } else if (selectedType === '息' && selectedSkillName === 'シャインブラスト') {
       const calculatedValue = 1.345 * attackPower + 19.196;
       eq = Math.floor(calculatedValue * resistCalc * boost1Calc * drTotal);
-    } else {
+    } else if (selectedType === '呪文' && selectedSkillName === 'リーサルウェポン') {
+      const calculatedValue =  4.54 * magicPower - 375.91;
+      eq = Math.floor(calculatedValue * resistCalc * boost1Calc * drTotal);
+    }else if (selectedType === '呪文' && selectedSkillName === 'カオススパーク') {
+      const calculatedValue = 1.561 * attackPower + 20.38;
+      eq = Math.floor(calculatedValue * resistCalc * boost1Calc * drTotal);
+    }else {
       eq = Math.floor(selectedSkillPower * resistCalc * boost1Calc * drTotal);
     }
 
