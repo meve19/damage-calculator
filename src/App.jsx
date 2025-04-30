@@ -71,7 +71,8 @@ export default function App() {
   const [breathResistance, setBreathResistance] = useState(0);
   const [damageReduction, setDamageReduction] = useState(0);
   const [damageReduction2, setDamageReduction2] = useState(0);
-  const [damageReduction3, setDamageReduction3] = useState(30);
+  const [damageReduction3, setDamageReduction3] = useState(0);
+  const [damageReduction4, setDamageReduction4] = useState(30);
   const [attributeResistancejyaku, setAttrResJyaku] = useState(0);
 
   const [equalDamage, setEqualDamage] = useState(0);
@@ -121,7 +122,7 @@ export default function App() {
     const buffMultiplier = (1 + buff1 / 100) * (1 + buff2 / 100) * (1 + buff3 / 100);
     const boost1Calc = baseBoost * buffMultiplier;
     const resistCalc = 1 - breathResistance / 100;
-    const drTotal = (1 - damageReduction / 100) * (1 - damageReduction2 / 100) * (1 - damageReduction3 / 100);
+    const drTotal = (1 - damageReduction / 100) * (1 - damageReduction2 / 100) * (1 - damageReduction3 / 100) * (1 - damageReduction4 / 100);;
     const attrResCalc = 1.5 - attributeResistancejyaku / 100;
 
     // 物理スキルの場合の計算
@@ -251,15 +252,52 @@ export default function App() {
       <div><label>バフ1(%): <input type="number" value={buff1} onChange={e => setBuff1(+e.target.value)} /></label></div>
       <div><label>バフ2(%): <input type="number" value={buff2} onChange={e => setBuff2(+e.target.value)} /></label></div>
       <div><label>バフ3(%): <input type="number" value={buff3} onChange={e => setBuff3(+e.target.value)} /></label></div>
-      <div><label>ばつぐん(%): <input type="number" value={superEffective} onChange={e => setSuperEffective(+e.target.value)} /></label></div>
+      <div>
+        <label className="tooltip" data-tooltip="才能開花のばつぐんはここ">
+         ばつぐん(%): 
+        <input 
+          type="number" 
+          value={superEffective} 
+          onChange={e => setSuperEffective(+e.target.value)} 
+        />
+        </label>
+      </div>
 
       <h2>敵情報</h2>
       {selectedType === '物理' && <div><label>守備力: <input type="number" value={defensePower} onChange={e => setDefensePower(+e.target.value)} /></label></div>}
-      <div><label>物理/呪文/息/体技耐性(%): <input type="number" value={breathResistance} onChange={e => setBreathResistance(+e.target.value)} /></label></div>
-      <div><label>ダメージ軽減(%): <input type="number" value={damageReduction} onChange={e => setDamageReduction(+e.target.value)} /></label></div>
+      <div>
+        <label className="tooltip" data-tooltip="装備による軽減や、バーハの40、才能開花での属性物理耐性等(5)の値等の合計値 ">
+          物理/呪文/息/体技耐性(%): 
+          <input 
+            type="number" 
+            value={breathResistance} 
+            onChange={e => setBreathResistance(+e.target.value)} 
+          />
+        </label>
+      </div>
+      <div>
+        <label className="tooltip" data-tooltip="才能開花の1%、スキルパネル、かばう:20、みがわり:40、勇者特性:30などを軽減2,3と分けて1項目ずついれる">
+          ダメージ軽減(%): 
+          <input 
+            type="number" 
+            value={damageReduction} 
+            onChange={e => setDamageReduction(+e.target.value)} 
+          />
+        </label>
+      </div>
       <div><label>ダメージ軽減2(%): <input type="number" value={damageReduction2} onChange={e => setDamageReduction2(+e.target.value)} /></label></div>
-      <div><label>闘技場軽減(%): <input type="number" value={damageReduction3} onChange={e => setDamageReduction3(+e.target.value)} /></label></div>
-      <div><label>属性耐性(%): <input type="number" value={attributeResistancejyaku} onChange={e => setAttrResJyaku(+e.target.value)} /></label></div>
+      <div><label>ダメージ軽減3(%): <input type="number" value={damageReduction3} onChange={e => setDamageReduction3(+e.target.value)} /></label></div>
+      <div><label>闘技場軽減(%): <input type="number" value={damageReduction4} onChange={e => setDamageReduction4(+e.target.value)} /></label></div>
+      <div>
+        <label className="tooltip" data-tooltip="装備による属性耐性や才能開花での属性耐性(予測値で5)をいれる">
+          属性耐性(%): 
+          <input 
+            type="number" 
+            value={attributeResistancejyaku} 
+            onChange={e => setAttrResJyaku(+e.target.value)} 
+          />
+        </label>
+      </div>
 
       <button onClick={calculate}>計算</button>
 
