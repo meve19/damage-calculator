@@ -7,8 +7,9 @@ export default function App() {
 
   const skills = {
     物理: [
-      { name: 'プリズムソード', value: 1 ,power: 0 },
-      { name: '魔王の絶技', value: 2 ,power: 0},
+      { name: 'テンプレなし', value: 1 ,power: 0 },
+      { name: 'プリズムソード', value: 2 ,power: 0 },
+      { name: '魔王の絶技', value: 3 ,power: 0},
     ],
     呪文: [
       { name: 'リーサルウェポン', value: 1,power: 0 },
@@ -202,7 +203,7 @@ export default function App() {
           <select value={selectedSkill} onChange={(e) => setSelectedSkill(+e.target.value)}>
             {sortedSkills.map(skill => (
               <option key={skill.name} value={skill.value}>
-                {skill.name} {skill.value > 0 && `(${skill.power})`}
+                {skill.name} 
               </option>
             ))}
           </select>
@@ -323,8 +324,8 @@ export default function App() {
       <button onClick={calculate}>計算</button>
 
       <div style={{ marginTop: '1rem' }}>
-        <p>等倍ダメージ: {equalDamage.toFixed(2)}</p>
-        <p>弱点ダメージ: {weakDamage.toFixed(2)}</p>
+        <p>等倍ダメージ: {equalDamage}</p>
+        <p>弱点ダメージ: {weakDamage}</p>
       </div>
     </div>
   );
