@@ -13,6 +13,10 @@ export default function App() {
     呪文: [
       { name: 'リーサルウェポン', value: 1,power: 0 },
       { name: 'カオススパーク', value: 2,power: 0 },
+      { name: 'ウルフレア', value: 3,power: 0 },
+      { name: '絶対凍土', value: 4,power: 0 },
+      { name: 'メイルシュトロム', value: 5,power: 0 },
+      { name: 'ギガジャティス', value: 6,power: 0 },
     ],
     息: [
       { name: 'シャインブラスト', value: -1,power: 0 },
@@ -38,7 +42,7 @@ export default function App() {
       { name: '裏切りの炎', value: 10, power: 1268 },
       { name: 'らぶぎゃるショット', value: 11, power: 1017 },
  //     { name: '夢幻の咆哮', value: 12, power: 0 },
- //     { name: 'メテオストライク', value: -1, power: 0 },
+      { name: 'シャークアタック', value: -1, power: 0 },
  //     { name: 'キャプテンサイクロン', value: 13, power: 0 },
  //     { name: 'バーニングアタック', value: 14, power: 0 },
  //     { name: 'パイレーツスクランブル', value: 15, power: 0 },
@@ -140,9 +144,26 @@ export default function App() {
       const calculatedValue =  (4.54 * magicPower - 375.91)/1.005;
       eq = Math.floor(calculatedValue * resistCalc * boost1Calc * drTotal);
     }else if (selectedType === '呪文' && selectedSkillName === 'カオススパーク') {
-      const calculatedValue = 1.561 * attackPower + 20.38;
+      const calculatedValue = 1.561 * magicPower + 20.38;
       eq = Math.floor(calculatedValue * resistCalc * boost1Calc * drTotal);
-    }else {
+    }else if (selectedType === '呪文' && selectedSkillName === 'ウルフレア') {
+       const calculatedValue = (2.637 * magicPower - 65.29)/1.005;
+       eq = Math.floor(calculatedValue * resistCalc * boost1Calc * drTotal);
+   }else if (selectedType === '呪文' && selectedSkillName === '絶対凍土') {
+    const calculatedValue = (2.05 * magicPower - 18.5)/1.005;
+    eq = Math.floor(calculatedValue * resistCalc * boost1Calc * drTotal);
+    }else if (selectedType === '呪文' && selectedSkillName === 'メイルシュトロム') {
+      const calculatedValue = ( -1.03E-6 * Math.pow(magicPower, 2) + 1.67 * magicPower - 2.61 )/1.005;
+      eq = Math.floor(calculatedValue * resistCalc * boost1Calc * drTotal);
+    }else if (selectedType === '呪文' && selectedSkillName === 'ギガジャティス') {
+      const calculatedValue = (-0.00000711 * Math.pow(magicPower, 2) + 2.2410 * magicPower - 44.75)/1.005;
+      eq = Math.floor(calculatedValue * resistCalc * boost1Calc * drTotal);
+    }else if (selectedType === '体技' && selectedSkillName === 'シャークアタック') {
+      const calculatedValue = ( -0.00000209 * Math.pow(attackPower,2) + 2.0459 * attackPower - 23.92)/1.005;
+      eq = Math.floor(calculatedValue * resistCalc * boost1Calc * drTotal);
+    }
+    
+    else {
       eq = Math.floor(selectedSkillPower * resistCalc * boost1Calc * drTotal);
     }
 
@@ -215,7 +236,7 @@ export default function App() {
     {selectedType === '呪文' && (
       <div>
         <label>
-          かしこさ: 
+          かしこさ(攻撃依存は攻撃力): 
           <input type="number" value={magicPower} onChange={e => setMagicPower(+e.target.value)} />
         </label>
       </div>
