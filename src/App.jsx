@@ -17,26 +17,26 @@ export default function App() {
     息: [
       { name: 'シャインブラスト', value: -1,power: 0 },
       { name: 'ラグナヘイズ', value: 1, power: 1714 },
-  //    { name: 'ダークボリューション', value: 2, power: 0 },
-  //    { name: 'ダークキトシン', value: 3 , power: 0 },
+      { name: 'ダークポリューション', value: 2, power: 1219 },
+      { name: 'ダークキトシン', value: 3 , power: 892 },
       { name: '燃え盛る聖熱', value: 4 ,power: 1203 },
       { name: 'ミスティックブレス', value: 5, power: 1307 },
       { name: '冥嵐球', value: 6, power: 1272 },
- //     { name: 'ニズゼフレア', value: 7, power: 0 },
- //     { name: '招雷波', value: 8, power: 0 },
+      { name: 'ニズゼフレア', value: 7, power: 1189 },
+      { name: '招雷波', value: 8, power: 990 },
     ],
     体技: [
       { name: 'メテオランチャー', value: 1, power: 1181 },
       { name: 'ブラックホール', value: 2, power: 1143 },
- //     { name: 'ダークフェザー', value: 3, power: 0 },
- //     { name: 'ふみならし', value: 4, power: 0 },
- //     { name: 'ブオーンインパクト', value: 5, power: 0 },
- //     { name: '邪悪な誘い', value: 6, power: 0 },
- //     { name: 'イビルプレス', value: 7, power: 0 },
- //     { name: '終末の炎', value: 8, power: 0 },
+      { name: 'ダークフェザー', value: 3, power: 1021 },
+      { name: 'ふみならし', value: 4, power: 1106 },
+      { name: 'ブオーンインパクト', value: 5, power: 1044 },
+      { name: '邪悪な誘い', value: 6, power: 1326 },
+      { name: 'イビルプレス', value: 7, power:  1105},
+      { name: '終末の炎', value: 8, power: 1715 },
       { name: 'ステテコストリーム', value: 9, power: 1196 },
- //     { name: '裏切りの炎', value: 10, power: 0 },
- //     { name: 'らぶぎゃるショット', value: 11, power: 0 },
+      { name: '裏切りの炎', value: 10, power: 1268 },
+      { name: 'らぶぎゃるショット', value: 11, power: 1017 },
  //     { name: '夢幻の咆哮', value: 12, power: 0 },
  //     { name: 'メテオストライク', value: -1, power: 0 },
  //     { name: 'キャプテンサイクロン', value: 13, power: 0 },
@@ -137,7 +137,7 @@ export default function App() {
       const calculatedValue = 1.345 * attackPower + 19.196;
       eq = Math.floor(calculatedValue * resistCalc * boost1Calc * drTotal);
     } else if (selectedType === '呪文' && selectedSkillName === 'リーサルウェポン') {
-      const calculatedValue =  4.54 * magicPower - 375.91;
+      const calculatedValue =  (4.54 * magicPower - 375.91)/1.005;
       eq = Math.floor(calculatedValue * resistCalc * boost1Calc * drTotal);
     }else if (selectedType === '呪文' && selectedSkillName === 'カオススパーク') {
       const calculatedValue = 1.561 * attackPower + 20.38;
