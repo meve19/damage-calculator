@@ -57,7 +57,7 @@ export default function App() {
   const sortedSkills = skills[selectedType].sort((a, b) => a.name.localeCompare(b.name));
 
   const [selectedSkill, setSelectedSkill] = useState(sortedSkills[0]?.value || 0);
-  const [kiso, setKiso] = useState(0);
+  const [manualSkillPower, setManualSkillPower] = useState('');
   const [superEffective, setSuperEffective] = useState(0);
 
   const [skillLevel, setskillLevel] = useState(10);
@@ -134,7 +134,8 @@ export default function App() {
     let eq = 0;
     const selectedSkillObj = skills[selectedType].find(skill => skill.value === selectedSkill);
     const selectedSkillName = selectedSkillObj?.name;
-    const selectedSkillPower = selectedSkillObj?.power ?? 0;
+    const selectedSkillPower = manualSkillPower !== '' ? Number(manualSkillPower) : (selectedSkillObj?.power ?? 0);
+
 
     if (selectedType === '物理') {
       eq = Math.floor(((attackPower / 2 - defensePower / 4) * (specialRate / 100)) * resistCalc * boost1Calc * drTotal);
@@ -211,6 +212,12 @@ export default function App() {
         {/* <label>または直接入力:
           <input type="number" value={selectedSkill} onChange={e => setSelectedSkill(+e.target.value)} />
         </label> */}
+      </div>
+      <div>
+        <label>
+          威力を直接入力（任意）: 
+          <input type="number" value={manualSkillPower} onChange={e => setManualSkillPower(e.target.value)} />
+        </label>
       </div>
 
       {(selectedType === '物理' || selectedType === '呪文' || (['息', '体技'].includes(selectedType) && selectedSkill < 0)) && (
