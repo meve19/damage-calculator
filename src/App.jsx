@@ -54,6 +54,66 @@ export default function App() {
     ],
   };
 
+  const enemyResistances = {
+    Galgeos1: {
+      general: 30, // 物理/呪文/息/
+      reduction1: 30,
+      reduction2: 0,
+      reduction3: 0,
+      attribute: 0, // 属性耐性
+    },
+    Galgeos2: {
+      general: 0, 
+      reduction1: 30,
+      reduction2: 0,
+      reduction3: 0,
+      attribute: 0, // 属性耐性
+    },
+    Eight1: {
+      general: 0,
+      reduction1: 30, //勇者軽減
+      reduction2: 20, //フォース
+      reduction3: 5,  //スキルパネル
+      attribute: 0,
+    },
+    Eight2: {
+      general: 0,
+      reduction1: 30, //勇者軽減
+      reduction2: 0, //フォースなし
+      reduction3: 5,  //スキルパネル
+      attribute: 0,
+    },
+    HamaSera1: {
+      general:  35, //バーハ+才能開花ヒャドギラ
+      reduction1: 50, //軽減50
+      reduction2: 1,  //才能開花全ダメージ1%
+      reduction3: 0,
+      attribute: 5,//才能開花ヒャドギラ
+    },
+    HamaSera2: {
+      general: 5, //才能開花ヒャドギラ
+      reduction1: 50, //軽減50
+      reduction2: 1,  //才能開花全ダメージ1%
+      reduction3: 0,
+      attribute: 5,//才能開花ヒャドギラ
+    },
+    HamaSera3: {
+      general: 30, //バーハ
+      reduction1: 50, //軽減50
+      reduction2: 1,  //才能開花全ダメージ1%
+      reduction3: 0,
+      attribute: 0,
+    },
+    HamaSera4: {
+      general: 0, 
+      reduction1: 50, //軽減50
+      reduction2: 1,  //才能開花全ダメージ1%
+      reduction3: 0,
+      attribute: 0,
+    },
+    // 必要に応じて追加
+  };
+
   const sortedSkills = skills[selectedType].sort((a, b) => a.name.localeCompare(b.name));
 
   const [selectedSkill, setSelectedSkill] = useState(sortedSkills[0]?.value || 0);
@@ -73,11 +133,7 @@ export default function App() {
   const [buff2, setBuff2] = useState(0);
   const [buff3, setBuff3] = useState(0);
 
-  const [breathResistance, setBreathResistance] = useState(0);
-  const [damageReduction, setDamageReduction] = useState(0);
-  const [damageReduction2, setDamageReduction2] = useState(0);
-  const [damageReduction3, setDamageReduction3] = useState(0);
-  const [damageReduction4, setDamageReduction4] = useState(30);
+  const [damageReductionTogi, setDamageReductionTogi] = useState(30);
   const [attributeResistancejyaku, setAttrResJyaku] = useState(0);
 
   const [equalDamage, setEqualDamage] = useState(0);
@@ -88,6 +144,16 @@ export default function App() {
   const [defensePower, setDefensePower] = useState(0);
   const [magicPower, setMagicPower] = useState(0);
   const [specialRate, setSpecialRate] = useState(0); 
+
+  const [selectedEnemyType, setSelectedEnemyType] = useState("");
+  const [resistances, setResistances] = useState({
+    general: 0,
+    reduction1: 0,
+    reduction2: 0,
+    reduction3: 0,
+    attribute: 0,
+  });
+
 
   useEffect(() => {
     const total = skillpanelBonus + levelBonus + constellationBonus + attributeRankBonus + talentBloomBonus + leaderBonus + equipmentBonus;
@@ -126,9 +192,9 @@ export default function App() {
     const baseBoost = powerCalc;
     const buffMultiplier = (1 + buff1 / 100) * (1 + buff2 / 100) * (1 + buff3 / 100);
     const boost1Calc = baseBoost * buffMultiplier;
-    const resistCalc = 1 - breathResistance / 100;
-    const drTotal = (1 - damageReduction / 100) * (1 - damageReduction2 / 100) * (1 - damageReduction3 / 100) * (1 - damageReduction4 / 100);;
-    const attrResCalc = 1.5 - attributeResistancejyaku / 100;
+    const resistCalc = 1 - resistances.general / 100;
+    const drTotal = (1 - resistances.reduction1 / 100) * (1 - resistances.reduction2 / 100) * (1 - resistances.reduction3 / 100) * (1 - damageReductionTogi / 100);;
+    const attrResCalc = 1.5 - resistances.attribute / 100;
 
     // 物理スキルの場合の計算
     let eq = 0;
@@ -293,14 +359,44 @@ export default function App() {
       </div>
 
       <h2>敵情報</h2>
+      <label>敵情報テンプレ(任意):
+        <select
+          value={selectedEnemyType}
+          onChange={(e) => {
+            const selected = e.target.value;
+            setSelectedEnemyType(selected);
+            setResistances(enemyResistances[selected] || {
+              general: 0,
+              reduction1: 0,
+              reduction2: 0,
+              reduction3: 0,
+              attribute: 0,
+            });
+          }}
+        >
+          <option value="">設定なし</option>
+          <option value="Galgeos1">ガルゲオス物理呪文息</option>
+          <option value="Galgeos2">ガルゲオス体技</option>
+          <option value="Eight1">勇者エイト(属性ダメージ)</option>
+          <option value="Eight2">勇者エイト(無属性ダメージまたはフォースなし)</option>
+          <option value="HamaSera1">完凸浜セラ息ギラヒャド</option>
+          <option value="HamaSera2">未完凸浜セラまたは息以外ギラヒャド</option>
+          <option value="HamaSera3">完凸浜セラ息ギラヒャド以外</option>
+          <option value="HamaSera4">未完凸浜セラまたは息以外ギラヒャド以外</option>
+          {/* 他の敵も追加可 */}
+        </select>
+      </label>
+
+
+
       {selectedType === '物理' && <div><label>守備力: <input type="number" value={defensePower} onChange={e => setDefensePower(+e.target.value)} /></label></div>}
       <div>
-        <label className="tooltip" data-tooltip="装備による軽減や、バーハの40、才能開花での属性物理耐性等(5)の値等の合計値 ">
+        <label className="tooltip" data-tooltip="装備による軽減や、バーハの30、才能開花での属性物理耐性等(5)の値等の合計値 ">
           物理/呪文/息/体技耐性(%): 
           <input 
             type="number" 
-            value={breathResistance} 
-            onChange={e => setBreathResistance(+e.target.value)} 
+            value={resistances.general} 
+            onChange={e => setResistances({ ...resistances, general: +e.target.value })}
           />
         </label>
       </div>
@@ -309,21 +405,35 @@ export default function App() {
           ダメージ軽減(%): 
           <input 
             type="number" 
-            value={damageReduction} 
-            onChange={e => setDamageReduction(+e.target.value)} 
+            value={resistances.reduction1}
+            onChange={(e) => setResistances({ ...resistances, reduction1: Number(e.target.value) })}
           />
         </label>
       </div>
-      <div><label>ダメージ軽減2(%): <input type="number" value={damageReduction2} onChange={e => setDamageReduction2(+e.target.value)} /></label></div>
-      <div><label>ダメージ軽減3(%): <input type="number" value={damageReduction3} onChange={e => setDamageReduction3(+e.target.value)} /></label></div>
-      <div><label>闘技場軽減(%): <input type="number" value={damageReduction4} onChange={e => setDamageReduction4(+e.target.value)} /></label></div>
+      <div><label>ダメージ軽減2(%): 
+        <input 
+          type="number"
+          value={resistances.reduction2}
+          onChange={(e) => setResistances({ ...resistances, reduction2: Number(e.target.value) })}
+        />
+      </label></div>
+        <div><label>ダメージ軽減3(%): 
+        <input 
+        type="number"
+        value={resistances.reduction3}
+        onChange={(e) => setResistances({ ...resistances, reduction3: Number(e.target.value) })}
+        />
+      </label></div>
+
+      <div><label>闘技場軽減(%): <input type="number" value={damageReductionTogi} onChange={e => setDamageReductionTogi(+e.target.value)} /></label></div>
+
       <div>
         <label className="tooltip" data-tooltip="装備による属性耐性や才能開花での属性耐性(予測値で5)をいれる">
           属性耐性(%): 
           <input 
             type="number" 
-            value={attributeResistancejyaku} 
-            onChange={e => setAttrResJyaku(+e.target.value)} 
+            value={resistances.attribute}
+            onChange={(e) => setResistances({ ...resistances, attribute: Number(e.target.value) })}
           />
         </label>
       </div>
