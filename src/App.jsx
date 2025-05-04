@@ -167,7 +167,7 @@ export default function App() {
     if (selectedSkillName === 'プリズムソード' || selectedSkillName === 'シャインブラスト') {
       setBuff1(20);
       setskillpanelBonus(5);
-    }else if(selectedSkillName === '魔王の絶技'){
+    }else if(selectedSkillName === '魔王の絶技' || selectedSkillName === 'ラグナヘイズ' || selectedSkillName === 'カオススパーク'){
       setBuff1(15);
       setskillpanelBonus(0);
     }else {
