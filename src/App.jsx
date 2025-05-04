@@ -83,6 +83,13 @@ export default function App() {
       reduction3: 5,  //スキルパネル
       attribute: 0,
     },
+    Eight3: {
+      general: 0,
+      reduction1: 0, //勇者軽減なし
+      reduction2: 0, //フォースなし
+      reduction3: 5,  //スキルパネル
+      attribute: 0,
+    },
     HamaSera1: {
       general:  35, //バーハ+才能開花ヒャドギラ
       reduction1: 50, //軽減50
@@ -378,7 +385,8 @@ export default function App() {
           <option value="Galgeos1">ガルゲオス物理呪文息</option>
           <option value="Galgeos2">ガルゲオス体技</option>
           <option value="Eight1">勇者エイト(属性ダメージ)</option>
-          <option value="Eight2">勇者エイト(無属性ダメージまたはフォースなし)</option>
+          <option value="Eight2">勇者エイト(無属性ダメージ)</option>
+          <option value="Eight3">勇者エイト(バフはがし後)</option>
           <option value="HamaSera1">完凸浜セラ息ギラヒャド</option>
           <option value="HamaSera2">未完凸浜セラまたは息以外ギラヒャド</option>
           <option value="HamaSera3">完凸浜セラ息ギラヒャド以外</option>
